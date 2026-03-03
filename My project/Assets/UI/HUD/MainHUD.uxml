@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+    <Style src="MainHUD.uss" />
+    <ui:VisualElement name="Container" class="hud-container">
+        <ui:VisualElement name="MainPanel" class="glass-panel" style="width: 400px; height: 600px; position: absolute; right: 20px; top: 20px;">
+            <ui:VisualElement class="header">
+                <ui:Label text="SISTEMA XR" class="title" />
+                <ui:VisualElement name="StatusTag" class="status-indicator status-searching">
+                    <ui:Label text="BUSCANDO..." name="StatusLabel" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="TechStats" style="flex-direction: row; justify-content: space-around; margin-bottom: 10px; padding: 10px; background-color: rgba(0, 0, 0, 0.2); border-radius: 8px;">
+                <ui:VisualElement style="align-items: center;">
+                    <ui:Label text="LATÊNCIA" style="color: rgba(255, 255, 255, 0.5); font-size: 10px;" />
+                    <ui:Label name="LatencyValue" text="0.0 ms" style="color: #38bdf8; font-size: 14px; -unity-font-style: bold;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="align-items: center;">
+                    <ui:Label text="BITRATE" style="color: rgba(255, 255, 255, 0.5); font-size: 10px;" />
+                    <ui:Label name="BitrateValue" text="0.0 Mbps" style="color: #38bdf8; font-size: 14px; -unity-font-style: bold;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:Label text="HEADSETS DISPONÍVEIS" style="color: rgba(255, 255, 255, 0.5); font-size: 12px; margin-bottom: 10px;" />
+            
+            <ui:ScrollView name="DeviceList" class="device-list">
+                <!-- Items serão injetados via script -->
+                <ui:VisualElement class="device-item">
+                    <ui:Label text="Oculus Quest 3" class="device-name" />
+                    <ui:Button text="CONECTAR" class="control-btn" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+
+            <ui:VisualElement class="footer">
+                <ui:Button name="BtnStream" class="icon-btn" tooltip="Streaming de Vídeo" />
+                <ui:Button name="BtnScan" class="icon-btn" tooltip="Detecção de Objetos" />
+                <ui:Button name="BtnHeatmap" class="icon-btn" tooltip="Mapa de Calor" />
+                <ui:Button name="BtnSettings" class="icon-btn" tooltip="Configurações" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
