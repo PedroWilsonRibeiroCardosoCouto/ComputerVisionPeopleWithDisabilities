@@ -16,9 +16,11 @@ namespace LuckArkman.XR.UI
         [SerializeField] private WifiDiscoveryManager discoveryManager;
         [SerializeField] private SignalingClient signalingClient;
         [SerializeField] private LatencyMonitor latencyMonitor;
+        [SerializeField] private LuckArkman.XR.AR.SpatialSyncManager spatialSync;
 
         private Label latencyLabel;
         private Label bitrateLabel;
+        private Label arStatusLabel;
 
         private void OnEnable()
         {
@@ -32,6 +34,7 @@ namespace LuckArkman.XR.UI
             // Novos elementos (opcionais na UI inicial)
             latencyLabel = root.Q<Label>("LatencyValue");
             bitrateLabel = root.Q<Label>("BitrateValue");
+            arStatusLabel = root.Q<Label>("ArStatusText");
 
             deviceList.Clear();
             discoveryManager.OnHeadsetFound += UpdateDeviceList;
@@ -41,6 +44,12 @@ namespace LuckArkman.XR.UI
         {
             if (latencyLabel != null)
                 latencyLabel.text = $"{latencyMonitor.LastRtt:F1} ms";
+
+            if (arStatusLabel != null)
+            {
+                arStatusLabel.text = spatialSync.IsSynced ? "ESPACIAL: SINCRONIZADO" : "ESPACIAL: AGUARDANDO CALIBRAÇÃO";
+                arStatusLabel.style.color = spatialSync.IsSynced ? new StyleColor(Color.green) : new StyleColor(Color.yellow);
+            }
         }
 
         private void UpdateDeviceList()

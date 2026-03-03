@@ -15,6 +15,8 @@
                 </ui:VisualElement>
             </ui:VisualElement>
 
+            <ui:Label name="ArStatusText" text="ESPACIAL: INICIALIZANDO..." style="color: #eab308; font-size: 10px; -unity-font-style: bold; margin-bottom: 5px;" />
+
             <ui:VisualElement name="TechStats" style="flex-direction: row; justify-content: space-around; margin-bottom: 10px; padding: 10px; background-color: rgba(0, 0, 0, 0.2); border-radius: 8px;">
                 <ui:VisualElement style="align-items: center;">
                     <ui:Label text="LATÊNCIA" style="color: rgba(255, 255, 255, 0.5); font-size: 10px;" />
