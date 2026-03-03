@@ -18,6 +18,8 @@ namespace LuckArkman.XR.UI
         [SerializeField] private LatencyMonitor latencyMonitor;
         [SerializeField] private LuckArkman.XR.AR.SpatialSyncManager spatialSync;
         [SerializeField] private LuckArkman.XR.AI.YoloInferenceManager yoloAI;
+        [SerializeField] private LuckArkman.XR.Safety.RiskCalculator riskCalculator;
+        [SerializeField] private LuckArkman.XR.Safety.HeatmapManager heatmapManager;
 
         private Label latencyLabel;
         private Label bitrateLabel;
