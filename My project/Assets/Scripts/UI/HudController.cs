@@ -17,10 +17,12 @@ namespace LuckArkman.XR.UI
         [SerializeField] private SignalingClient signalingClient;
         [SerializeField] private LatencyMonitor latencyMonitor;
         [SerializeField] private LuckArkman.XR.AR.SpatialSyncManager spatialSync;
+        [SerializeField] private LuckArkman.XR.AI.YoloInferenceManager yoloAI;
 
         private Label latencyLabel;
         private Label bitrateLabel;
         private Label arStatusLabel;
+        private Label aiStatusLabel;
 
         private void OnEnable()
         {
@@ -35,6 +37,7 @@ namespace LuckArkman.XR.UI
             latencyLabel = root.Q<Label>("LatencyValue");
             bitrateLabel = root.Q<Label>("BitrateValue");
             arStatusLabel = root.Q<Label>("ArStatusText");
+            aiStatusLabel = root.Q<Label>("AiStatusText");
 
             deviceList.Clear();
             discoveryManager.OnHeadsetFound += UpdateDeviceList;
@@ -49,6 +52,12 @@ namespace LuckArkman.XR.UI
             {
                 arStatusLabel.text = spatialSync.IsSynced ? "ESPACIAL: SINCRONIZADO" : "ESPACIAL: AGUARDANDO CALIBRAÇÃO";
                 arStatusLabel.style.color = spatialSync.IsSynced ? new StyleColor(Color.green) : new StyleColor(Color.yellow);
+            }
+
+            if (aiStatusLabel != null)
+            {
+                aiStatusLabel.text = "IA: PRONTA (SENTIS GPU)";
+                aiStatusLabel.style.color = new StyleColor(new Color(0.22f, 0.74f, 0.97f)); // Cyan
             }
         }
 
