@@ -1,5 +1,5 @@
 using UnityEngine;
-using Unity.Sentis;
+
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,11 +11,11 @@ namespace LuckArkman.XR.AI
     public class YoloInferenceManager : MonoBehaviour
     {
         [Header("Configurações do Modelo")]
-        public ModelAsset modelAsset;
+        public Unity.InferenceEngine.ModelAsset modelAsset;
         public ComputeShader preProcessShader;
         
         private IWorker worker;
-        private Model model;
+        private Unity.InferenceEngine.Model model;
         
         [Header("Parâmetros de Detecção")]
         [Range(0, 1)] public float confidenceThreshold = 0.5f;
@@ -32,10 +32,10 @@ namespace LuckArkman.XR.AI
 
         private void LoadModel()
         {
-            model = ModelLoader.Load(modelAsset);
+            model = Unity.InferenceEngine.ModelLoader.Load(modelAsset);
             
             // Backend recomendado para mobile: GPU (Vulkan/Metal)
-            worker = WorkerFactory.CreateWorker(BackendType.GPUCompute, model);
+            worker = WorkerFactory.CreateWorker(Unity.InferenceEngine.BackendType.GPUCompute, model);
             
             Debug.Log("[YoloAI] Modelo carregado e Worker inicializado na GPU.");
         }
@@ -46,7 +46,7 @@ namespace LuckArkman.XR.AI
         public void ExecuteInference(RenderTexture sourceTexture)
         {
             // 1. Pré-processamento (Redimensionamento e Normalização via Compute Shader)
-            using TensorFloat inputTensor = TextureConverter.ToTensor(sourceTexture, targetWidth, targetHeight, 3);
+            using TensorFloat inputTensor = Unity.InferenceEngine.TextureConverter.ToTensor(sourceTexture, targetWidth, targetHeight, 3);
             
             // 2. Executar Inferência
             worker.Execute(inputTensor);

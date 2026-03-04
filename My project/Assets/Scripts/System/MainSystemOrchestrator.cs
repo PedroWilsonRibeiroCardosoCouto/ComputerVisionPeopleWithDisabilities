@@ -4,9 +4,10 @@ using LuckArkman.XR.AR;
 using LuckArkman.XR.AI;
 using LuckArkman.XR.Safety;
 using LuckArkman.XR.UI;
+using LuckArkman.XR.Optimization;
 using System.Collections.Generic;
 
-namespace LuckArkman.XR.System
+namespace LuckArkman.XR.Main
 {
     /// <summary>
     /// Orquestrador central que une todos os módulos do sistema.
@@ -24,6 +25,7 @@ namespace LuckArkman.XR.System
         public RiskCalculator riskCalculator;
         public HeatmapManager heatmapManager;
         public HudController hudController;
+        public BatteryOptimizer batteryOptimizer;
 
         [Header("Configurações de Execução")]
         public float aiProcessInterval = 0.1f; // 10 FPS de IA para economizar bateria
