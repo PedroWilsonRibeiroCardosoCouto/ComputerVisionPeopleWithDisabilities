@@ -78,14 +78,24 @@
       "source": "registry",
       "testable": false
     },
-    "com.unity.sentis@2.2.0": {
-      "name": "com.unity.sentis",
+    "com.unity.ai.inference@2.4.1": {
+      "name": "com.unity.ai.inference",
       "displayName": "Sentis",
-      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.sentis@eef1e5173b44",
-      "fingerprint": "eef1e5173b4415b913bc722b20f858a7086fa48c",
+      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.ai.inference@587873fd5e1b",
+      "fingerprint": "587873fd5e1bd2d10f696bceb1a83c296823e927",
       "editorCompatibility": "6000.0.0a1",
-      "version": "2.2.0",
-      "source": "builtin",
+      "version": "2.4.1",
+      "source": "registry",
+      "testable": false
+    },
+    "com.unity.webrtc@3.0.0": {
+      "name": "com.unity.webrtc",
+      "displayName": "WebRTC",
+      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.webrtc@9605a106619b",
+      "fingerprint": "9605a106619b5225ac063ee4deaa0ee698b659a1",
+      "editorCompatibility": "6000.0.0a1",
+      "version": "3.0.0",
+      "source": "registry",
       "testable": false
     },
     "com.unity.xr.arcore@6.3.2": {
@@ -476,13 +486,43 @@
       "source": "registry",
       "testable": false
     },
-    "com.unity.ai.inference@2.4.1": {
-      "name": "com.unity.ai.inference",
-      "displayName": "Sentis",
-      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.ai.inference@587873fd5e1b",
-      "fingerprint": "587873fd5e1bd2d10f696bceb1a83c296823e927",
-      "editorCompatibility": "6000.0.0a1",
-      "version": "2.4.1",
+    "com.unity.burst@1.8.27": {
+      "name": "com.unity.burst",
+      "displayName": "Burst",
+      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.burst@973857688024",
+      "fingerprint": "973857688024e0c6019b60f7a3b403e8e467c4d0",
+      "editorCompatibility": "2022.3.0a1",
+      "version": "1.8.27",
+      "source": "registry",
+      "testable": false
+    },
+    "com.unity.dt.app-ui@2.1.1": {
+      "name": "com.unity.dt.app-ui",
+      "displayName": "App UI",
+      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.dt.app-ui@8ac7e730dd5d",
+      "fingerprint": "8ac7e730dd5d58a41cb027e3460759e072fe3d6c",
+      "editorCompatibility": "2021.3.0a1",
+      "version": "2.1.1",
+      "source": "registry",
+      "testable": false
+    },
+    "com.unity.collections@2.6.2": {
+      "name": "com.unity.collections",
+      "displayName": "Collections",
+      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.collections@aea9d3bd5e19",
+      "fingerprint": "aea9d3bd5e19f2a90fc3a39919974a5f3613a159",
+      "editorCompatibility": "2022.3.20f1",
+      "version": "2.6.2",
+      "source": "registry",
+      "testable": false
+    },
+    "com.unity.nuget.newtonsoft-json@3.2.2": {
+      "name": "com.unity.nuget.newtonsoft-json",
+      "displayName": "Newtonsoft Json",
+      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.nuget.newtonsoft-json@4dfd81071c64",
+      "fingerprint": "4dfd81071c6475bb9c114f920bfb4e3fc5e28c6a",
+      "editorCompatibility": "2018.4.0a1",
+      "version": "3.2.2",
       "source": "registry",
       "testable": false
     },
@@ -576,43 +616,23 @@
       "source": "registry",
       "testable": false
     },
-    "com.unity.burst@1.8.27": {
-      "name": "com.unity.burst",
-      "displayName": "Burst",
-      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.burst@973857688024",
-      "fingerprint": "973857688024e0c6019b60f7a3b403e8e467c4d0",
-      "editorCompatibility": "2022.3.0a1",
-      "version": "1.8.27",
+    "com.unity.nuget.mono-cecil@1.11.6": {
+      "name": "com.unity.nuget.mono-cecil",
+      "displayName": "Mono Cecil",
+      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.nuget.mono-cecil@ecb9724e46ff",
+      "fingerprint": "ecb9724e46fff855c46a4f37f0a3377a3cfffc06",
+      "editorCompatibility": "2019.4.0a1",
+      "version": "1.11.6",
       "source": "registry",
       "testable": false
     },
-    "com.unity.dt.app-ui@2.1.1": {
-      "name": "com.unity.dt.app-ui",
-      "displayName": "App UI",
-      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.dt.app-ui@8ac7e730dd5d",
-      "fingerprint": "8ac7e730dd5d58a41cb027e3460759e072fe3d6c",
-      "editorCompatibility": "2021.3.0a1",
-      "version": "2.1.1",
-      "source": "registry",
-      "testable": false
-    },
-    "com.unity.collections@2.6.2": {
-      "name": "com.unity.collections",
-      "displayName": "Collections",
-      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.collections@aea9d3bd5e19",
-      "fingerprint": "aea9d3bd5e19f2a90fc3a39919974a5f3613a159",
-      "editorCompatibility": "2022.3.20f1",
-      "version": "2.6.2",
-      "source": "registry",
-      "testable": false
-    },
-    "com.unity.nuget.newtonsoft-json@3.2.2": {
-      "name": "com.unity.nuget.newtonsoft-json",
-      "displayName": "Newtonsoft Json",
-      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.nuget.newtonsoft-json@4dfd81071c64",
-      "fingerprint": "4dfd81071c6475bb9c114f920bfb4e3fc5e28c6a",
-      "editorCompatibility": "2018.4.0a1",
-      "version": "3.2.2",
+    "com.unity.test-framework.performance@3.2.0": {
+      "name": "com.unity.test-framework.performance",
+      "displayName": "Performance testing API",
+      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.test-framework.performance@0840f58e4562",
+      "fingerprint": "0840f58e45624f7677679a0f8b6a5137689e607f",
+      "editorCompatibility": "2020.3.0a1",
+      "version": "3.2.0",
       "source": "registry",
       "testable": false
     },
@@ -634,26 +654,6 @@
       "editorCompatibility": "2019.4.0a1",
       "version": "2.0.5",
       "source": "builtin",
-      "testable": false
-    },
-    "com.unity.nuget.mono-cecil@1.11.6": {
-      "name": "com.unity.nuget.mono-cecil",
-      "displayName": "Mono Cecil",
-      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.nuget.mono-cecil@ecb9724e46ff",
-      "fingerprint": "ecb9724e46fff855c46a4f37f0a3377a3cfffc06",
-      "editorCompatibility": "2019.4.0a1",
-      "version": "1.11.6",
-      "source": "registry",
-      "testable": false
-    },
-    "com.unity.test-framework.performance@3.2.0": {
-      "name": "com.unity.test-framework.performance",
-      "displayName": "Performance testing API",
-      "resolvedPath": "D:\\MobileUI\\My project\\Library\\PackageCache\\com.unity.test-framework.performance@0840f58e4562",
-      "fingerprint": "0840f58e45624f7677679a0f8b6a5137689e607f",
-      "editorCompatibility": "2020.3.0a1",
-      "version": "3.2.0",
-      "source": "registry",
       "testable": false
     }
   }

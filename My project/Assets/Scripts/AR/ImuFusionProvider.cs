@@ -5,7 +5,6 @@ namespace LuckArkman.XR.AR
 {
     /// <summary>
     /// Fornece fusão de dados de sensores (IMU) para predição de pose suave.
-    /// Complementa o rastreamento visual do ARCore.
     /// </summary>
     public class ImuFusionProvider : MonoBehaviour
     {
@@ -15,37 +14,30 @@ namespace LuckArkman.XR.AR
         [Header("Configurações de Suavização")]
         [Range(0.01f, 1.0f)] public float filterCoefficient = 0.1f;
 
+        private Accelerometer accelerometer;
+        private AttitudeSensor attitudeSensor;
+
         private void Start()
         {
-            if (AttitudeSensor.current != null)
-                InputSystem.EnableDevice(AttitudeSensor.current);
-            
-            if (Accelerometer.current != null)
-                InputSystem.EnableDevice(Accelerometer.current);
+            accelerometer = InputSystem.GetDevice<Accelerometer>();
+            attitudeSensor = InputSystem.GetDevice<AttitudeSensor>();
+
+            if (accelerometer != null) InputSystem.EnableDevice(accelerometer);
+            if (attitudeSensor != null) InputSystem.EnableDevice(attitudeSensor);
         }
 
         private void Update()
         {
-            UpdateRotation();
-            UpdateGravity();
-        }
-
-        private void UpdateRotation()
-        {
-            if (AttitudeSensor.current != null)
+            if (attitudeSensor != null)
             {
-                Quaternion rawRot = AttitudeSensor.current.attitude.ReadValue();
-                // Conversão de coordenadas (Device to Unity)
+                Quaternion rawRot = attitudeSensor.attitude.ReadValue();
                 Quaternion convertedRot = new Quaternion(rawRot.x, rawRot.y, -rawRot.z, -rawRot.w);
                 currentRotation = Quaternion.Slerp(currentRotation, convertedRot, filterCoefficient);
             }
-        }
 
-        private void UpdateGravity()
-        {
-            if (Accelerometer.current != null)
+            if (accelerometer != null)
             {
-                Vector3 rawAccel = Accelerometer.current.acceleration.ReadValue();
+                Vector3 rawAccel = accelerometer.acceleration.ReadValue();
                 gravityVector = Vector3.Lerp(gravityVector, rawAccel, filterCoefficient);
             }
         }

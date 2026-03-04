@@ -14,7 +14,7 @@ namespace LuckArkman.XR.AI
         public Unity.InferenceEngine.ModelAsset modelAsset;
         public ComputeShader preProcessShader;
         
-        private IWorker worker;
+        private Unity.InferenceEngine.Worker worker;
         private Unity.InferenceEngine.Model model;
         
         [Header("Parâmetros de Detecção")]
@@ -34,8 +34,8 @@ namespace LuckArkman.XR.AI
         {
             model = Unity.InferenceEngine.ModelLoader.Load(modelAsset);
             
-            // Backend recomendado para mobile: GPU (Vulkan/Metal)
-            worker = WorkerFactory.CreateWorker(Unity.InferenceEngine.BackendType.GPUCompute, model);
+            // Em Sentis 2.x / Inference Engine, WorkerFactory.CreateWorker foi substituído pelo construtor de Worker
+            worker = new Unity.InferenceEngine.Worker(model, Unity.InferenceEngine.BackendType.GPUCompute);
             
             Debug.Log("[YoloAI] Modelo carregado e Worker inicializado na GPU.");
         }
@@ -45,20 +45,23 @@ namespace LuckArkman.XR.AI
         /// </summary>
         public void ExecuteInference(RenderTexture sourceTexture)
         {
-            // 1. Pré-processamento (Redimensionamento e Normalização via Compute Shader)
-            using TensorFloat inputTensor = Unity.InferenceEngine.TextureConverter.ToTensor(sourceTexture, targetWidth, targetHeight, 3);
+            // 1. Pré-processamento e normalização
+            Unity.InferenceEngine.Tensor<float> inputTensor = Unity.InferenceEngine.TextureConverter.ToTensor(sourceTexture, targetWidth, targetHeight, 3);
             
-            // 2. Executar Inferência
-            worker.Execute(inputTensor);
+            // 2. Agendar Inferência (Assíncrono)
+            worker.Schedule(inputTensor);
             
-            // 3. Obter Saída
-            TensorFloat outputTensor = worker.PeekOutput() as TensorFloat;
+            // 3. Obter Saída (Referência não bloqueante)
+            Unity.InferenceEngine.Tensor<float> outputTensor = worker.PeekOutput() as Unity.InferenceEngine.Tensor<float>;
             
-            // 4. Agendar processamento dos resultados (Async para não travar a main thread)
+            // 4. Processar resultados
             ProcessResults(outputTensor);
+            
+            // Liberar tensores temporários
+            inputTensor.Dispose();
         }
 
-        private void ProcessResults(TensorFloat output)
+        private void ProcessResults(Unity.InferenceEngine.Tensor<float> output)
         {
             // Aqui entra a lógica de decodificação das Bounding Boxes específicas do YOLO
             // Como cada versão do YOLO (v8, v10, v11) tem um formato de saída,

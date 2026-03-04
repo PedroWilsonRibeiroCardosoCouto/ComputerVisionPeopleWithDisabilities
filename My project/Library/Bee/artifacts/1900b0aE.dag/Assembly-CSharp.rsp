@@ -136,6 +136,7 @@
 -define:TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
 -define:TEXTCORE_TEXT_ENGINE_1_5_OR_NEWER
 -define:TEXTCORE_FONT_ENGINE_1_6_OR_NEWER
+-define:APP_UI_EDITOR_ONLY
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
 -r:"D:/.Editor/6000.3.5f2/Editor/Data/Managed/UnityEngine/UnityEditor.AccessibilityModule.dll"
@@ -465,6 +466,8 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Tutorials.Core.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.UnifiedRayTracing.Runtime.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.VisualStudio.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.ARAnalytics.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.ARCore.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.XR.ARCore.ref.dll"
@@ -515,6 +518,7 @@
 "Assets/Scripts/AR/ARCoordinator.cs"
 "Assets/Scripts/AR/ImuFusionProvider.cs"
 "Assets/Scripts/AR/SpatialSyncManager.cs"
+"Assets/Scripts/Main/MainSystemOrchestrator.cs"
 "Assets/Scripts/Networking/LatencyMonitor.cs"
 "Assets/Scripts/Networking/SignalingClient.cs"
 "Assets/Scripts/Networking/WifiDiscoveryManager.cs"
@@ -522,7 +526,6 @@
 "Assets/Scripts/Optimization/SecureTransmissionUtils.cs"
 "Assets/Scripts/Safety/HeatmapManager.cs"
 "Assets/Scripts/Safety/RiskCalculator.cs"
-"Assets/Scripts/System/MainSystemOrchestrator.cs"
 "Assets/Scripts/UI/DiagnosticOverlay.cs"
 "Assets/Scripts/UI/HudController.cs"
 "Assets/Settings/Project Configuration/SceneTemplate_RotateCube.cs"
