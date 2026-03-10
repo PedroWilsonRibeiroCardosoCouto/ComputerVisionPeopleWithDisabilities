@@ -3,6 +3,8 @@ UnityEngine
 Experimental
 Rendering
 Universal
+FullScreenPassRendererFeature
+
 RenderQueueType
 RenderObjects
 AssetModificationProcessor
@@ -149,12 +151,16 @@ RayTracingAccelerationStructure
 RendererList
 RendererUtils
 RendererListStatus
-RayTracingShader
+RayTracingShaderHelpURLAttribute
 PixelPerfectRendering
 U2D
 SpriteBone
 LocalizationAsset
 UnityEditor
+CurrentPlayer
+Unity
+Multiplayer
+Playmode
 SpriteShapeParameters
 UnityEngine
 Experimental
