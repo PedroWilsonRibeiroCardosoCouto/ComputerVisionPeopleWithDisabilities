@@ -1,0 +1,231 @@
+#include "esp_camera.h"
+#include <WiFi.h>
+#include <WiFiUdp.h>
+#include "esp_http_server.h"
+#include <ESP32Servo.h>
+#include "soc/soc.h"           
+#include "soc/rtc_cntl_reg.h"  
+
+// --- CONFIGURAÇÃO WIFI ---
+const char* ssid = "IFMAKER";
+const char* password = "37624958";
+
+// --- CONFIGURAÇÃO UDP (AUTO-DESCOBERTA) ---
+WiFiUDP udp;
+const int udpPort = 4444; 
+unsigned long lastBeaconTime = 0;
+
+// Definição de Pinos AI-Thinker
+#define PWDN_GPIO_NUM     32
+#define RESET_GPIO_NUM    -1
+#define XCLK_GPIO_NUM      0
+#define SIOD_GPIO_NUM     26
+#define SIOC_GPIO_NUM     27
+#define Y9_GPIO_NUM       35
+#define Y8_GPIO_NUM       34
+#define Y7_GPIO_NUM       39
+#define Y6_GPIO_NUM       36
+#define Y5_GPIO_NUM       21
+#define Y4_GPIO_NUM       19
+#define Y3_GPIO_NUM       18
+#define Y2_GPIO_NUM        5
+#define VSYNC_GPIO_NUM    25
+#define HREF_GPIO_NUM     23
+#define PCLK_GPIO_NUM     22
+
+const int buzzerPin = 13;
+const int servoPin = 14; 
+Servo meuServo;
+
+httpd_handle_t stream_httpd = NULL;
+httpd_handle_t control_httpd = NULL;
+
+#define PART_BOUNDARY "123456789000000000000987654321"
+static const char* _STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
+static const char* _STREAM_BOUNDARY = "\r\n--" PART_BOUNDARY "\r\n";
+static const char* _STREAM_PART = "Content-Type: image/jpeg\r\nContent-Length: %u\r\n\r\n";
+
+void bip(int freq, int dur) {
+  if (freq > 0) {
+    ledcWriteTone(buzzerPin, freq);
+    delay(dur);
+    ledcWriteTone(buzzerPin, 0);
+  }
+}
+
+static esp_err_t control_handler(httpd_req_t *req) {
+  char buf[64];
+  if (httpd_req_get_url_query_str(req, buf, sizeof(buf)) == ESP_OK) {
+    String q = String(buf);
+    
+    int angleIndex = q.indexOf("angle=");
+    if (angleIndex != -1) {
+      int nextAmpersand = q.indexOf('&', angleIndex);
+      String angleStr = (nextAmpersand == -1) ? q.substring(angleIndex + 6) : q.substring(angleIndex + 6, nextAmpersand);
+      int angle = angleStr.toInt();
+      if (angle >= 0 && angle <= 180) meuServo.write(angle);
+    }
+
+    int buzzIndex = q.indexOf("buzz=");
+    if (buzzIndex != -1) {
+      int nextAmpersand = q.indexOf('&', buzzIndex);
+      String buzzStr = (nextAmpersand == -1) ? q.substring(buzzIndex + 5) : q.substring(buzzIndex + 5, nextAmpersand);
+      int freq = buzzStr.toInt();
+      bip(freq, 50); 
+    }
+  }
+  
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+  httpd_resp_send(req, "OK", 2); 
+  return ESP_OK;
+}
+
+static esp_err_t stream_handler(httpd_req_t *req) {
+  camera_fb_t * fb = NULL;
+  esp_err_t res = ESP_OK;
+  size_t _jpg_buf_len = 0;
+  uint8_t * _jpg_buf = NULL;
+  char * part_buf[64];
+  
+  res = httpd_resp_set_type(req, _STREAM_CONTENT_TYPE);
+  if (res != ESP_OK) return res;
+
+  while (true) {
+    fb = esp_camera_fb_get();
+    if (!fb) { 
+      res = ESP_FAIL; 
+    } else {
+      _jpg_buf_len = fb->len;
+      _jpg_buf = fb->buf;
+      
+      if (res == ESP_OK) {
+        size_t hlen = snprintf((char *)part_buf, 64, _STREAM_PART, _jpg_buf_len);
+        res = httpd_resp_send_chunk(req, (const char *)part_buf, hlen);
+      }
+      if (res == ESP_OK) {
+        res = httpd_resp_send_chunk(req, (const char *)_jpg_buf, _jpg_buf_len);
+      }
+      if (res == ESP_OK) {
+        res = httpd_resp_send_chunk(req, _STREAM_BOUNDARY, strlen(_STREAM_BOUNDARY));
+      }
+      esp_camera_fb_return(fb);
+    }
+
+    if (res != ESP_OK) {
+      // O Unity desconectou abruptamente! Sai do laço e libera a porta.
+      Serial.println("[Stream] Cliente desconectou. Liberando servidor.");
+      break; 
+    }
+    
+    // Pequeno delay para resfriamento e watchdog
+    vTaskDelay(20 / portTICK_PERIOD_MS); 
+  }
+  return res;
+}
+
+void setup() {
+  //WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); 
+  Serial.begin(115200);
+
+  // =========================================================================
+  // NOVO: RESPIRO DE ENERGIA E DIAGNÓSTICO
+  // =========================================================================
+  delay(2000); // Espera 2 segundos para a tensão estabilizar na placa
+  Serial.println("\n\n--- INICIANDO O CEREBRO LAROSA ---");
+  // =========================================================================
+
+  camera_config_t config;
+  config.ledc_channel = LEDC_CHANNEL_7; 
+  config.ledc_timer   = LEDC_TIMER_3;     
+  config.pin_d0       = Y2_GPIO_NUM; 
+  config.pin_d1       = Y3_GPIO_NUM; 
+  config.pin_d2       = Y4_GPIO_NUM;
+  config.pin_d3       = Y5_GPIO_NUM; 
+  config.pin_d4       = Y6_GPIO_NUM; 
+  config.pin_d5       = Y7_GPIO_NUM;
+  config.pin_d6       = Y8_GPIO_NUM; 
+  config.pin_d7       = Y9_GPIO_NUM; 
+  config.pin_xclk     = XCLK_GPIO_NUM;
+  config.pin_pclk     = PCLK_GPIO_NUM; 
+  config.pin_vsync    = VSYNC_GPIO_NUM; 
+  config.pin_href     = HREF_GPIO_NUM;
+  config.pin_sscb_sda = SIOD_GPIO_NUM; 
+  config.pin_sscb_scl = SIOC_GPIO_NUM;
+  config.pin_pwdn     = PWDN_GPIO_NUM; 
+  config.pin_reset    = RESET_GPIO_NUM;
+  
+  // OTIMIZAÇÃO 1: Dobro da velocidade do clock (10 MHz)
+  config.xclk_freq_hz = 10000000; 
+  config.pixel_format = PIXFORMAT_JPEG;
+
+  if (psramFound()) {
+    config.frame_size   = FRAMESIZE_QVGA;  
+    // OTIMIZAÇÃO 2: Ponto de equilíbrio exato de compressão do ESP-IDF
+    config.jpeg_quality = 12;                
+    config.fb_count     = 1; // Usar 1 previne estouros de RAM no longo prazo
+    config.fb_location  = CAMERA_FB_IN_PSRAM;
+  } else {
+    config.frame_size   = FRAMESIZE_QVGA;
+    config.jpeg_quality = 12;
+    config.fb_count     = 1;
+    config.fb_location  = CAMERA_FB_IN_DRAM;
+  }
+
+  esp_err_t err = esp_camera_init(&config);
+  if (err != ESP_OK) {
+    Serial.printf("FALHA NA CAMERA! Erro: 0x%x\n", err);
+    return;
+  } 
+  
+  sensor_t * s = esp_camera_sensor_get();
+  if (s != NULL) {
+    // OTIMIZAÇÃO 3: Desligando lógicas pesadas do sensor
+    s->set_whitebal(s, 0);       // Desliga AWB
+    s->set_awb_gain(s, 0);       // Desliga ganho de AWB
+    s->set_exposure_ctrl(s, 0);  // Desliga AE
+    s->set_special_effect(s, 2); // Preto e Branco
+  }
+
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  meuServo.setPeriodHertz(50);
+  meuServo.attach(servoPin, 500, 2400);
+  meuServo.write(90); 
+
+  ledcAttach(buzzerPin, 2000, 8); 
+  bip(1500, 200); 
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+  }
+
+  httpd_config_t config80 = HTTPD_DEFAULT_CONFIG();
+  config80.server_port = 80;
+  if (httpd_start(&stream_httpd, &config80) == ESP_OK) {
+    httpd_uri_t uri_s = { "/stream", HTTP_GET, stream_handler, NULL };
+    httpd_register_uri_handler(stream_httpd, &uri_s);
+  }
+
+  httpd_config_t config81 = HTTPD_DEFAULT_CONFIG();
+  config81.server_port = 81;
+  config81.ctrl_port = 32769; 
+  if (httpd_start(&control_httpd, &config81) == ESP_OK) {
+    httpd_uri_t uri_c = { "/actuator", HTTP_GET, control_handler, NULL };
+    httpd_register_uri_handler(control_httpd, &uri_c);
+  }
+  
+  bip(3000, 100); 
+  bip(3000, 100); 
+}
+
+void loop() { 
+  if (WiFi.status() == WL_CONNECTED && millis() - lastBeaconTime > 2000) {
+    udp.beginPacket("255.255.255.255", udpPort);
+    String msg = "LAROSA_IP:" + WiFi.localIP().toString();
+    udp.print(msg);
+    udp.endPacket();
+    lastBeaconTime = millis();
+  }
+  delay(50); 
+}
